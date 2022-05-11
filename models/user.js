@@ -5,17 +5,12 @@ const userSchema = new Schema({
   name: { type: String, required: true, unique: true },
   email: {type:String, required: true, unique: true},
   
-  posts: [ { type: Schema.Types.ObjectId, ref: 'Place' } ],
+  favorites: [ { type: Schema.Types.ObjectId, ref: 'place' } ],
 
-  favorites: [ { type: Schema.Types.ObjectId, ref: 'Place' } ],
-
-  itinerary: [ { type: Schema.Types.ObjectId, ref: 'Place' } ],
-
-  reviews: [ { type: Schema.Types.ObjectId, ref: 'Review' } ] 
-
+  reviews: [ { type: Schema.Types.ObjectId, ref: 'review' } ] 
 
 })
 
-const User = mongoose.model('User', userSchema);
+const user = mongoose.model('user', userSchema);
 
-module.exports = User;
+module.exports = user;

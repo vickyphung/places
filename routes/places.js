@@ -1,3 +1,5 @@
+//when deleting a place, delete reviews for that place also
+
 const express = require('express');
 const router = express.Router();
 
@@ -60,35 +62,45 @@ router.post("/", (req, res) =>{
 //     })
 //   })
   
-//   router.delete('/:productId/:userId', (req, res) => {
-//     Product.deleteOne({ // delete a product
-//       _id: req.params.productId // with the id specified in the request
-//     }, (error, deletedProduct) => {
-//       if (error) {
-//         console.error(error); // error handling magic
-//         res.status(404).json({
-//           error: 'No Product found to delete with that id'
-//         })
-//       } else {
-//         User.updateOne({ // updates the user
-//           _id: req.params.userId // with the id specified in the request
-//         }, {
-//           $pull: {
-//             sold_products: req.params.productId // removes the product with the id in the request from the sold_products array
-//           }
-//         }, (error, updatedUser) => {
-//           if (error) {
-//             console.error(error); // error handling magic
-//             res.status(404).json({
-//               error: 'No user found with that id'
-//             })
-//           } else {
-//             console.log('Successfully deleted the product and removed it from user\'s sold products')
-//             res.status(204) // sends back 204 to indicate that the product was removed!
-//           }
-//         })
-//       }
-//     })
-//   })
+  router.delete('/:productId/:userId', (req, res) => {
+    place.deleteOne({ // delete a product
+      _id: req.params.placeId // with the id specified in the request
+    }, (error, deletedPlace) => {
+      
+        if (error) {
+        console.error(error); // error handling magic
+        res.status(404).json({
+          error: 'No place found to delete with that id'
+        })
+
+      } else {
+        
+        
+        user.updateOne({ // updates the user
+
+          _id: req.params.userId // with the id specified in the request
+        }, {
+          $pull: {
+            favorites: req.params.placeId // removes the product with the id in the request from the sold_products array
+          }
+        }, (error, updatedUser) => {
+          if (error) {
+            console.error(error); // error handling magic
+            res.status(404).json({
+              error: 'No user found with that id'
+            })
+          } else {
+            console.log('Successfully deleted the place and removed it from user\'s favorites')
+            res.status(204) // sends back 204 to indicate that the product was removed!
+          }
+
+        })
+
+
+      }
+
+
+    })
+  })
   
   module.exports = router;

@@ -3,7 +3,7 @@ const { Schema } = require("mongoose");
 const mongoose = require("mongoose");
 
 const placeSchema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
 
   // street_address: { type: String, required: true },
   // city: { type: String, required: true },
@@ -14,13 +14,12 @@ const placeSchema = new Schema({
   hours: { type: String, required: false },
   category: [ { type: String, required: true } ],
 
-  posted_by: { type: Schema.Types.ObjectId, ref: 'user' },
-  reviews: [ { type: Schema.Types.ObjectId, ref: 'review' } ],
-  comments: [ { type: String, ref: 'review' } ],
-  favorite_users: [ { type: Schema.Types.ObjectId, ref: 'user' } ]
+  reviews: [ { type: Schema.Types.ObjectId, ref: 'review', required: false } ],
+//   comments: [ { type: String, ref: 'review', required: false } ],
+  favorite_users: [ { type: Schema.Types.ObjectId, ref: 'user', required: false } ]
 
 })
 
-const Place = mongoose.model('Place', placeSchema);
+const place = mongoose.model('place', placeSchema);
 
-module.exports = Place;
+module.exports = place;
