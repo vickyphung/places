@@ -5,10 +5,10 @@ const reviewSchema = new Schema({
   user: { type: String },
 // user: [ { type: Schema.Types.ObjectId, ref: 'User' } ],
 
-  place: { type: Schema.Types.ObjectId, ref: 'Place'},
+  place: { type: Schema.Types.ObjectId, ref: 'place'},
   review: { type: String }
 })
 
-const Review = mongoose.model('Review', reviewSchema);
+const review = mongoose.model('review', reviewSchema);
 
-module.exports = Review;
+module.exports = review;

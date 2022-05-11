@@ -22,8 +22,8 @@ server.use('/user', userRouter);
 const placeRouter = require('./routes/places');
 server.use('/places', placeRouter);
 
-// const extraRouter = require('./routes/extras');
-// server.use('/extra', extraRouter);
+const reviewRouter = require('./routes/reviews');
+server.use('/reviews', reviewRouter);
 
 server.listen(PORT, () => {
   mongoConfig()
