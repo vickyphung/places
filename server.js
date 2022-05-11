@@ -16,11 +16,11 @@ server.get('/', (req, res) => {
   });
 });
 
-// const userRouter = require('./routes/users');
-// server.use('/user', userRouter);
+const userRouter = require('./routes/users');
+server.use('/user', userRouter);
 
-// const productRouter = require('./routes/products');
-// server.use('/product', productRouter);
+const placeRouter = require('./routes/places');
+server.use('/places', placeRouter);
 
 // const extraRouter = require('./routes/extras');
 // server.use('/extra', extraRouter);
