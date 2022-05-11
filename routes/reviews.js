@@ -4,6 +4,21 @@ const review = require('../models/review');
 const place = require('../models/place');
 const user = require('../models/user');
 
+
+
+
+router.get("/", (req, res)=>{
+    review.find((err, allReviews)=>{
+        if(err){
+            res.status(404).json({message: "Error. No reviews found."})
+        } else {
+            res.status(200).json({
+            reviews: allReviews})
+        }
+    })
+})
+
+
 router.post('/', (req, res) => {
   // sets the body to a variable
   const reviewData = req.body;
@@ -26,12 +41,11 @@ router.post('/', (req, res) => {
                     error: 'No user to add review to.'
                 });
             } else {
-                place.updateOne({ // updates the product with the id in the body
+                place.updateOne({ 
                     _id: reviewData.place
-                 }, {
+                  },  {
                     $push: {
-                    reviews: createdReview.review
-              
+                    reviews: createdReview.review 
                     }
                 },
 
@@ -62,5 +76,13 @@ router.post('/', (req, res) => {
   })
 });
 
-
+router.delete("/clear", (req, res)=>{
+    review.deleteMany((err)=>{
+        if(err){
+            res.status(404).json({message: err.message})
+        }else{
+            res.status(204).json({message: "DELETED"})
+        }
+    })
+})
 module.exports = router;

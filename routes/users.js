@@ -1,10 +1,21 @@
-
-//deleting a user deletes all place data
-
 const express = require('express');
 const router = express.Router();
 const user = require('../models/user');
 const place = require('../models/place')
+
+
+
+router.get("/allusers", (req, res)=>{
+    user.find((err, allUsers)=>{
+        if(err){
+            res.status(404).json({message: "Error. No user data found."})
+        } else {
+            res.status(200).json({
+            usersList: allUsers})
+        }
+    })
+})
+
 
 //Create User
 router.post('/', (req, res) => {
@@ -75,6 +86,19 @@ router.delete('/:id', (req, res) => {
             }
         )
     })
+
+
+router.delete("/clear", (req, res)=>{
+    user.deleteMany((err)=>{
+        if(err){
+            res.status(404).json({message: err.message})
+        }else{
+            res.status(204).json({message: "DELETED"})
+        }
+    })
+})
+
+
 
 router.put('/favorite/:userId/:placeId', (req, res) => {
     user.updateOne({ // we are updating one user

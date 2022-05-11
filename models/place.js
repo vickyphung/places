@@ -14,8 +14,8 @@ const placeSchema = new Schema({
   hours: { type: String, required: false },
   category: [ { type: String, required: true } ],
 
-  reviews: [ { type: Schema.Types.ObjectId, ref: 'review', required: false } ],
-//   comments: [ { type: String, ref: 'review', required: false } ],
+//   reviews: [ { type: Schema.Types.ObjectId, ref: 'review', required: false } ],
+  reviews: [ { type: String, ref: 'review', required: false } ],
   favorite_users: [ { type: Schema.Types.ObjectId, ref: 'user', required: false } ]
 
 })
