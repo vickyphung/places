@@ -55,18 +55,18 @@ router.post('/', (req, res) => {
             } else {
                 place.updateOne({ 
                     _id: reviewData.place
-                },  {
-                    $push: {
-                    reviews: createdReview.review 
-                    }
                 },
-
-                // {
-                //     $push: {
-                //     reviews: createdReview._id
-                //     }
-                // },
                 
+               { 
+                $push: {
+                    reviews: {
+                        review: createdReview.review,
+                        user: createdReview.user
+                    }
+
+                }
+               },
+
                 (error, updatedReview) => {
                     if (error) {
                         console.error("Review not appended to place");

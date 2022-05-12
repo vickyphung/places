@@ -13,7 +13,7 @@ router.get("/", (req, res)=>{
         if(err){
             res.status(404).json({message: "Error. No place data found."})
         } else {
-            res.status(200).json({message: "places to chill and enjoy in the DMV.",
+            res.status(200).json({message: "places to go in the DMV",
             placesList: allPlaces})
         }
     })

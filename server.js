@@ -12,7 +12,7 @@ server.use(morgan("dev"))
 
 server.get('/', (req, res) => {
     res.status(200).json({
-      message: "places places places to chill around the dmv. -vicky<3"
+      message: "places to go in the dmv"
     });
 }
 );
