@@ -11,10 +11,11 @@ server.use(express.json());
 server.use(morgan("dev"))
 
 server.get('/', (req, res) => {
-  res.status(200).json({
-    message: "API UP!"
-  });
-});
+    res.status(200).json({
+      message: "places places places to chill around the dmv. -vicky<3"
+    });
+}
+);
 
 const userRouter = require('./routes/users');
 server.use('/user', userRouter);
@@ -27,5 +28,5 @@ server.use('/reviews', reviewRouter);
 
 server.listen(PORT, () => {
   mongoConfig()
-  console.log('server is listening on port ' + PORT)
+  console.log('server is chillin on port ' + PORT)
 })

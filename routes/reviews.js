@@ -19,6 +19,17 @@ router.get("/", (req, res)=>{
 })
 
 
+router.get("/:placeId", (req, res)=>{
+    // const placeReviewed = req.params.placeId
+    review.find({place: req.params.placeId}, (err, review)=>{
+        if(err){
+            res.status(404).json({message: "Could not find reviews for the place with that ID."})
+        } else {
+            res.status(200).json({reviews: review})
+        }
+    })
+})
+
 router.post('/', (req, res) => {
   // sets the body to a variable
   const reviewData = req.body;
@@ -33,6 +44,7 @@ router.post('/', (req, res) => {
         }, {
             $push: {
             reviews: createdReview._id 
+            // reviews: createdReview.review
             }
         }, (error, updatedUser) => {
             if (error) {
@@ -43,7 +55,7 @@ router.post('/', (req, res) => {
             } else {
                 place.updateOne({ 
                     _id: reviewData.place
-                  },  {
+                },  {
                     $push: {
                     reviews: createdReview.review 
                     }
@@ -82,6 +94,20 @@ router.delete("/clear", (req, res)=>{
             res.status(404).json({message: err.message})
         }else{
             res.status(204).json({message: "DELETED"})
+        }
+    })
+})
+
+router.put("/:id", (req, res)=>{
+    const id = req.params.id
+    const updatedReview = req.body
+
+    review.findByIdAndUpdate(id, updatedReview, {new: true},(err, updatedReview)=>{
+        if(err){
+            res.status(404).json({message: "Review not updated."})
+        } else {
+            res.status(202).json({message: "Review updated.",
+            place: updatedReview})
         }
     })
 })

@@ -12,8 +12,19 @@ router.get("/", (req, res)=>{
         if(err){
             res.status(404).json({message: "Error. No place data found."})
         } else {
-            res.status(200).json({message: "Cool places and things to check out in the DC, MD, NoVA region.",
+            res.status(200).json({message: "places to chill and enjoy in the DMV.",
             placesList: allPlaces})
+        }
+    })
+})
+
+router.get("/:name", (req, res)=>{
+    const name = req.params.name
+    place.findOne({name: name,}, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find place with that name."})
+        } else {
+            res.status(200).json(place)
         }
     })
 })
