@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const place = require('../models/place');
+const review = require('../models/review');
 const user = require('../models/user');
 // const review = require('../models/review');
 
@@ -73,17 +74,40 @@ router.delete('/:placeId', (req, res) => {
                     res.status(404).json({
                     error: 'Error. No places to delete in user favorites.'
                     })
-                } else {
-                    console.log('Successfully deleted the place and removed it from user\'s favorites');
-                    res.status(204).json ({
-                        message: "Place and place data deleted."
-                    })
                 }
+                
+
+                else {
+                    review.deleteMany ({
+                        place: req.params.placeId
+                    }, (error, deletedReview) => {
+                        if (error) {
+                            console.error("Could not find review to delete."); 
+                            res.status(404).json({
+                                error: 'No review found to delete with that id'
+                            })
+                        } else {
+                            console.log('Successfully deleted the place, removed it from user\'s favorites, and deleted all reviews about the place.');
+                            res.status(204).json ({
+                                message: "Place and place data deleted."
+                            })
+                        }
+                    }
+                    )
+                }                
+                
+                
+                // else {
+                //     console.log('Successfully deleted the place and removed it from user\'s favorites');
+                //     res.status(204).json ({
+                //         message: "Place and place data deleted."
+                //     })
+                // }
             })
         }
     }
     )
-  })
+})
 
   router.delete("/clear", (req, res)=>{
     place.deleteMany((err)=>{
