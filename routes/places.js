@@ -1,19 +1,16 @@
-//when deleting a place, delete reviews for that place also
-
 const express = require('express');
 const router = express.Router();
 
 const place = require('../models/place');
 const review = require('../models/review');
 const user = require('../models/user');
-// const review = require('../models/review');
 
 router.get("/", (req, res)=>{
     place.find((err, allPlaces)=>{
         if(err){
             res.status(404).json({message: "Error. No place data found."})
         } else {
-            res.status(200).json({message: "places to go in the DMV",
+            res.status(200).json({message: "places to go",
             placesList: allPlaces})
         }
     })
@@ -23,7 +20,7 @@ router.get("/name/:name", (req, res)=>{
     const name = req.params.name
     place.findOne({name: name,}, (err, place)=>{
         if(err){
-            res.status(404).json({message: "Could not find place with that name."})
+            res.status(404).json({message: "Could not find a place with that name."})
         } else {
             res.status(200).json(place)
         }
@@ -31,10 +28,32 @@ router.get("/name/:name", (req, res)=>{
 })
 
 
+router.get("/alltags", (req, res)=>{
+    place.find({}, {tags: 1, _id:0 }, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find categories."})
+        } else {
+            res.status(200).json({categories: place})
+        }
+    })
+})
 
-router.get("/tags/:tag", (req, res)=>{
 
+router.get("/tag/:tag", (req, res)=>{
     place.find({tags: req.params.tag}, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find places with that tag."})
+        } else {
+            res.status(200).json({places: place})
+        }
+    })
+})
+
+router.get("/city/:city", (req, res)=>{
+    const city = req.params.city
+    place.find({
+        "location.city": city
+    }, (err, place)=>{
         if(err){
             res.status(404).json({message: "Could not find places within that city."})
         } else {
@@ -43,28 +62,10 @@ router.get("/tags/:tag", (req, res)=>{
     })
 })
 
-router.get("/city/:city", (req, res)=>{
-const city = req.params.city
-place.find({
-    
-    "location.city": city
-
-}, (err, place)=>{
-    if(err){
-        res.status(404).json({message: "Could not find places within that city."})
-    } else {
-        res.status(200).json({places: place})
-    }
-})
-})
-
-
 router.get("/state/:state", (req, res)=>{
     const state = req.params.state
-    place.find({
-        
+    place.find({  
         "location.state": state
-    
     }, (err, place)=>{
         if(err){
             res.status(404).json({message: "Could not find places within that state."})
@@ -72,8 +73,24 @@ router.get("/state/:state", (req, res)=>{
             res.status(200).json({places: place})
         }
     })
+})
+
+
+router.get("/:state/:tag", (req, res)=>{
+    const state = req.params.state
+    place.find({  
+        "location.state": state,
+        tags: req.params.tag
+
+    }, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find places within that state."})
+        } else {
+            res.status(200).json({places: place})
+        }
     })
-    
+})
+
 
 
 
@@ -94,8 +111,6 @@ router.post("/", (req, res) =>{
         }
     })
 })
-
-
 
 router.delete('/:placeId', (req, res) => {
     place.deleteOne({ 
@@ -121,10 +136,7 @@ router.delete('/:placeId', (req, res) => {
                     res.status(404).json({
                     error: 'Error. No places to delete in user favorites.'
                     })
-                }
-                
-
-                else {
+                } else {
                     review.deleteMany ({
                         place: req.params.placeId
                     }, (error, deletedReview) => {
@@ -134,29 +146,21 @@ router.delete('/:placeId', (req, res) => {
                                 error: 'No review found to delete with that id'
                             })
                         } else {
-                            console.log('Successfully deleted the place, removed it from user\'s favorites, and deleted all reviews about the place.');
+                            console.log('Successfully deleted the place, removed it from users favorites, and deleted all reviews pertaining to place.');
                             res.status(204).json ({
                                 message: "Place and place data deleted."
                             })
                         }
                     }
                     )
-                }                
-                
-                
-                // else {
-                //     console.log('Successfully deleted the place and removed it from user\'s favorites');
-                //     res.status(204).json ({
-                //         message: "Place and place data deleted."
-                //     })
-                // }
+                }
             })
         }
     }
     )
 })
 
-  router.delete("/clear", (req, res)=>{
+  router.delete("/clear/all", (req, res)=>{
     place.deleteMany((err)=>{
         if(err){
             res.status(404).json({message: err.message})
@@ -169,7 +173,6 @@ router.delete('/:placeId', (req, res) => {
 router.put("/:id", (req, res)=>{
     const id = req.params.id
     const updatedPlace = req.body
-
     place.findByIdAndUpdate(id, updatedPlace, {new: true},(err, updatedPlace)=>{
         if(err){
             res.status(404).json({message: "Place not updated."})

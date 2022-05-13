@@ -4,9 +4,6 @@ const review = require('../models/review');
 const place = require('../models/place');
 const user = require('../models/user');
 
-
-
-
 router.get("/", (req, res)=>{
     review.find((err, allReviews)=>{
         if(err){
@@ -43,8 +40,7 @@ router.post('/', (req, res) => {
             _id: reviewData.user
         }, {
             $push: {
-            reviews: createdReview._id 
-            // reviews: createdReview.review
+            reviews: createdReview._id
             }
         }, (error, updatedUser) => {
             if (error) {
@@ -55,19 +51,14 @@ router.post('/', (req, res) => {
             } else {
                 place.updateOne({ 
                     _id: reviewData.place
-                },
-                
-               { 
-                $push: {
-                    reviews: {
-                        review: createdReview.review,
-                        user: createdReview.user
+                }, { 
+                    $push: {
+                        reviews: {
+                            review: createdReview.review,
+                            user: createdReview.user
+                        }
                     }
-
-                }
-               },
-
-                (error, updatedReview) => {
+               }, (error, updatedReview) => {
                     if (error) {
                         console.error("Review not appended to place");
                         res.status(400).json({ 
@@ -87,10 +78,6 @@ router.post('/', (req, res) => {
     }
   })
 });
-
-
-
-
 
 
 router.delete('/:reviewId', (req, res) => {
@@ -115,9 +102,13 @@ router.delete('/:reviewId', (req, res) => {
                 if (error) {
                     console.error(error);
                     res.status(404).json({ 
-                        error: 'No user to remove review to.'
+                        error: 'No user to remove review from.'
                     });
-                } else {
+                }
+                
+                
+                
+                else {
                     place.updateMany({ 
                         $in: {
                             _id: deletedReview.reviews
@@ -129,13 +120,20 @@ router.delete('/:reviewId', (req, res) => {
                             user: deletedReview.user
                         }
                      }
-                   }, (error, updatedPlace) => {
+                   },
+                   
+                   
+                   
+                   (error, updatedPlace) => {
                         if (error) {
                             console.error("Review not removed from place");
                             res.status(400).json({ 
                                 error: 'Review not removed and place not updated.'
                             });
-                        } else {
+                        }
+            
+    
+                        else {
                             console.log('Successfully deleted the review, removed it from user\'s reviews, and deleted review from place.');
                             res.status(204).json ({
                                 message: "Review and review data deleted."
@@ -150,11 +148,6 @@ router.delete('/:reviewId', (req, res) => {
     )
 })
 
-
-
-
-
-
 router.delete("/clear", (req, res)=>{
     review.deleteMany((err)=>{
         if(err){
@@ -168,7 +161,6 @@ router.delete("/clear", (req, res)=>{
 router.put("/:id", (req, res)=>{
     const id = req.params.id
     const updatedReview = req.body
-
     review.findByIdAndUpdate(id, updatedReview, {new: true},(err, updatedReview)=>{
         if(err){
             res.status(404).json({message: "Review not updated."})

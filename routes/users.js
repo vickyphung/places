@@ -84,7 +84,7 @@ router.delete('/:id', (req, res) => {
     })
 
 
-router.delete("/clear", (req, res)=>{
+router.delete("/clear/all", (req, res)=>{
     user.deleteMany((err)=>{
         if(err){
             res.status(404).json({message: "pft couldn't even delete everything"})

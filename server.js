@@ -26,6 +26,10 @@ server.use('/places', placeRouter);
 const reviewRouter = require('./routes/reviews');
 server.use('/reviews', reviewRouter);
 
+const seedRouter = require('./routes/seed');
+server.use('/seed', seedRouter);
+
+
 server.listen(PORT, () => {
   mongoConfig()
   console.log('server is chillin on port ' + PORT)

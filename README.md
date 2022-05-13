@@ -1,9 +1,6 @@
 
 //delete review... deletes review and review from user, but not from place.
-//query places by city and category
 
-
-//seed route? :\ MEH.
 
 //security, headers, authentication, jwt, helmet, cors
 
@@ -29,7 +26,7 @@ n:n
 1:n
 -reviews: users, places
 
-within the place schema, made location it's own address (sub)schema
+within the place schema, made location it's own address (sub)schema, made _id field false.
 
 createReview, added timestamp, push review._id to user.reviews and push review string AND user id into place when post review
 
@@ -44,6 +41,18 @@ the 1:n and n:n relationships troubleshooting, like once i also deleted all my p
 would set up routes. then add the relationship stuff, then would have to edit the post/delete/update routes to incorporate new relationships, made me a lot better at keeping track of the brackets. 
 
 broke git. once i had my whole computer set as my git directory. lol. 10K changes pending. another time i had to remove the .git directory from the project. then red0. d000d0000ooOooooo. 
+
+
+Queries
+//all reviews for a place using place.id
+//a place by its name
+//all places with a certain tag
+//all places in a city
+//all places by state
+//all places by state and tag
+//lists all tags... could refine this. 
+
+
 
 
 
