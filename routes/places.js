@@ -19,7 +19,7 @@ router.get("/", (req, res)=>{
     })
 })
 
-router.get("/:name", (req, res)=>{
+router.get("/name/:name", (req, res)=>{
     const name = req.params.name
     place.findOne({name: name,}, (err, place)=>{
         if(err){
@@ -29,6 +29,53 @@ router.get("/:name", (req, res)=>{
         }
     })
 })
+
+
+
+router.get("/tags/:tag", (req, res)=>{
+
+    place.find({tags: req.params.tag}, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find places within that city."})
+        } else {
+            res.status(200).json({places: place})
+        }
+    })
+})
+
+router.get("/city/:city", (req, res)=>{
+const city = req.params.city
+place.find({
+    
+    "location.city": city
+
+}, (err, place)=>{
+    if(err){
+        res.status(404).json({message: "Could not find places within that city."})
+    } else {
+        res.status(200).json({places: place})
+    }
+})
+})
+
+
+router.get("/state/:state", (req, res)=>{
+    const state = req.params.state
+    place.find({
+        
+        "location.state": state
+    
+    }, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find places within that state."})
+        } else {
+            res.status(200).json({places: place})
+        }
+    })
+    })
+    
+
+
 
 router.post("/", (req, res) =>{
     const placeData = req.body
