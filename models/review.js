@@ -5,7 +5,7 @@ const reviewSchema = new Schema({
     // user: { type: String },
     user: { type: Schema.Types.ObjectId, ref: 'user' },
     place: { type: Schema.Types.ObjectId, ref: 'place'},
-    place_name:{ type: String },
+    // place_name:{ type: String },
     review: { type: String }
 }, { 
     timestamps:  { createdAt: true, updatedAt: false }

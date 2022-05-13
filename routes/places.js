@@ -5,6 +5,26 @@ const place = require('../models/place');
 const review = require('../models/review');
 const user = require('../models/user');
 
+
+router.post("/", (req, res) =>{
+    const placeData = req.body
+    place.create(placeData, (error, createdPlace) =>{
+        if (error){
+            console.error(error);
+            res.status(400).json({
+                error: "Error occured. Place not created."
+            })
+        } else {
+            console.log("Place created successfully.");
+            res.status(200).json({
+                message: "Place was successfully posted.",
+                place: createdPlace
+            })
+        }
+    })
+})
+
+
 router.get("/", (req, res)=>{
     place.find((err, allPlaces)=>{
         if(err){
@@ -12,6 +32,16 @@ router.get("/", (req, res)=>{
         } else {
             res.status(200).json({message: "places to go",
             placesList: allPlaces})
+        }
+    })
+})
+
+router.get("/alltags", (req, res)=>{
+    place.find({}, {tags: 1, _id:0 }, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find categories."})
+        } else {
+            res.status(200).json({categories: place})
         }
     })
 })
@@ -26,18 +56,6 @@ router.get("/name/:name", (req, res)=>{
         }
     })
 })
-
-
-router.get("/alltags", (req, res)=>{
-    place.find({}, {tags: 1, _id:0 }, (err, place)=>{
-        if(err){
-            res.status(404).json({message: "Could not find categories."})
-        } else {
-            res.status(200).json({categories: place})
-        }
-    })
-})
-
 
 router.get("/tag/:tag", (req, res)=>{
     place.find({tags: req.params.tag}, (err, place)=>{
@@ -91,26 +109,6 @@ router.get("/:state/:tag", (req, res)=>{
     })
 })
 
-
-
-
-router.post("/", (req, res) =>{
-    const placeData = req.body
-    place.create(placeData, (error, createdPlace) =>{
-        if (error){
-            console.error(error);
-            res.status(400).json({
-                error: "Error occured. Place not created."
-            })
-        } else {
-            console.log("Place created successfully.");
-            res.status(200).json({
-                message: "Place was successfully posted.",
-                place: createdPlace
-            })
-        }
-    })
-})
 
 router.delete('/:placeId', (req, res) => {
     place.deleteOne({ 

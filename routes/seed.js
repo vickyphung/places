@@ -89,7 +89,6 @@ const seedPlaces = [
             ]
         },
         {
-            "_id": "627dd75bbcd042b46fc7d0c3",
             "name": "Torpedo Factory",
             "location": {
                 "street": "105 N Union St",
@@ -232,7 +231,6 @@ const seedPlaces = [
             ]
         }
     ]
-
 
     router.get("/all/places", (req, res)=>{
         place.insertMany(seedPlaces, (err, allPlaces)=>{
