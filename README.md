@@ -1,5 +1,7 @@
 
 //delete review... deletes review and review from user, but not from place.
+//favorite user counter
+//lists all tags... sort/remove duplicates
 
 
 //security, headers, authentication, jwt, helmet, cors
@@ -26,7 +28,7 @@ n:n
 1:n
 -reviews: users, places
 
-within the place schema, made location it's own address (sub)schema, made _id field false.
+within the place schema, made location it's own address (sub)schema, made _id field false. hence no location data in mongoose, the location collection does show up. i don't think we need to access the addresses without the place, so to save space, i made the id false. but i think the address being it's own schema makes it easier to query. 
 
 createReview, added timestamp, push review._id to user.reviews and push review string AND user id into place when post review
 
@@ -50,7 +52,7 @@ Queries
 //all places in a city
 //all places by state
 //all places by state and tag
-//lists all tags... could refine this. 
+//lists all tags... could refine this.  sort/remove duplicates
 
 
 

@@ -45,9 +45,11 @@ const placeSchema = new Schema({
 //   reviews: [ { type: Schema.Types.ObjectId, ref: 'review', required: false } ],
   reviews: [ {
     review: { type: String, ref: 'review', required: false }, 
-    user: { type: Schema.Types.ObjectId, ref: 'review', required: false }
+    user: { type: Schema.Types.ObjectId, ref: 'review', required: false },
+    id: { type: Schema.Types.ObjectId, ref: 'review' }
   } ],
-  favorite_users: [ { type: Schema.Types.ObjectId, ref: 'user', required: false } ]
+  favorites:  { type: Number, default: 0, required: false, unique: true } ,
+  favorite_users: [ { type: Schema.Types.ObjectId, ref: 'user', unique: true, required: false } ]
 
 })
 

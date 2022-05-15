@@ -3,6 +3,28 @@ const router = express.Router();
 const user = require('../models/user');
 const place = require('../models/place')
 
+
+
+router.get('/', (req, res) => {
+    res.status(200).json({
+      message: "user index"
+    });
+}
+);
+
+
+router.get("/id/:userId", (req, res)=>{
+
+    user.find({_id: req.params.userId}, (err, user)=>{
+        if(err){
+            res.status(404).json({message: "Could not find user with that ID."})
+        } else {
+            res.status(200).json({user: user})
+        }
+    })
+})
+
+
 router.get("/allusers", (req, res)=>{
     user.find((err, allUsers)=>{
         if(err){
@@ -110,11 +132,22 @@ router.put('/favorite/:userId/:placeId', (req, res) => {
         } else {
             place.updateOne({
                 _id: req.params.placeId
-            }, {
+            },
+
+
+            {
+                $inc: {
+                    favorites: 1
+                },
+          
                 $push: {
                 favorite_users: req.params.userId
                 }
-            }, (error, updatedPlace) => {
+            }, 
+            
+            
+            
+             (error, updatedPlace) => {
                 if (error) {
                     console.error(error); 
                     res.status(404).json({

@@ -55,7 +55,8 @@ router.post('/', (req, res) => {
                     $push: {
                         reviews: {
                             review: createdReview.review,
-                            user: createdReview.user
+                            user: createdReview.user,
+                            _id: createdReview._id
                         }
                     }
                }, (error, updatedReview) => {
@@ -78,6 +79,76 @@ router.post('/', (req, res) => {
     }
   })
 });
+
+
+
+
+
+
+// router.delete('/:placeId', (req, res) => {
+//     place.deleteOne({ 
+//         _id: req.params.placeId 
+//     }, (error, deletedPlace) => {
+//         if (error) {
+//             console.error("Could not find place to delete."); 
+//             res.status(404).json({
+//                 error: 'No place found to delete with that id'
+//             })
+//         } else {      
+//             user.updateMany({
+//                 $in: {
+//                     _id: deletedPlace.favorites
+//                 }
+//             }, {
+//                 $pull: {
+//                 favorites: req.params.placeId
+//                 }
+//             }, (error, updatedUser) => {
+//                 if (error) {
+//                     console.error('Error. No places to delete in user favorites.');
+//                     res.status(404).json({
+//                     error: 'Error. No places to delete in user favorites.'
+//                     })
+//                 } else {
+//                     review.deleteMany ({
+//                         place: req.params.placeId
+//                     }, (error, deletedReview) => {
+//                         if (error) {
+//                             console.error("Could not find review to delete."); 
+//                             res.status(404).json({
+//                                 error: 'No review found to delete with that id'
+//                             })
+//                         } else {
+//                             console.log('Successfully deleted the place, removed it from users favorites, and deleted all reviews pertaining to place.');
+//                             res.status(204).json ({
+//                                 message: "Place and place data deleted."
+//                             })
+//                         }
+//                     }
+//                     )
+//                 }
+//             })
+//         }
+//     }
+//     )
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 router.delete('/:reviewId', (req, res) => {
@@ -106,18 +177,24 @@ router.delete('/:reviewId', (req, res) => {
                     });
                 }
                 
+
                 
                 
                 else {
-                    place.updateMany({ 
-                        $in: {
-                            _id: deletedReview.reviews
-                        }
-                    }, { 
+                    place.updateOne({
+
+                        _id: deletedReview.place
+                    
+                    },
+                    
+                    
+                    
+                    { 
                      $pull: {
                         reviews: {
                             review: deletedReview.review,
-                            user: deletedReview.user
+                            user: deletedReview.user,
+                            _id: deletedReview._id
                         }
                      }
                    },
@@ -147,6 +224,8 @@ router.delete('/:reviewId', (req, res) => {
     }
     )
 })
+
+
 
 router.delete("/clear", (req, res)=>{
     review.deleteMany((err)=>{
