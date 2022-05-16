@@ -26,7 +26,15 @@ router.post("/", (req, res) =>{
 
 
 router.get("/", (req, res)=>{
-    place.find((err, allPlaces)=>{
+    place.find()
+    .sort('name')
+    .populate({
+        path: 'reviews',
+        select: 'review user',
+        options: { _recursed: true }    
+    })
+    .exec
+    ((err, allPlaces)=>{
         if(err){
             res.status(404).json({message: "Error. No place data found."})
         } else {
@@ -36,7 +44,7 @@ router.get("/", (req, res)=>{
     })
 })
 
-router.get("/alltags", (req, res)=>{
+router.get("/all/tags", (req, res)=>{
     place.find({}, {tags: 1, _id:0 }, (err, place)=>{
         if(err){
             res.status(404).json({message: "Could not find categories."})
@@ -102,7 +110,9 @@ router.get("/:state/:tag", (req, res)=>{
 
     }, (err, place)=>{
         if(err){
-            res.status(404).json({message: "Could not find places within that state."})
+            res.status(404).json({
+                message: "Could not find places within that state."
+            })
         } else {
             res.status(200).json({places: place})
         }
@@ -110,7 +120,7 @@ router.get("/:state/:tag", (req, res)=>{
 })
 
 
-router.delete('/:placeId', (req, res) => {
+router.delete('/delete/:placeId', (req, res) => {
     place.deleteOne({ 
         _id: req.params.placeId 
     }, (error, deletedPlace) => {
@@ -158,7 +168,7 @@ router.delete('/:placeId', (req, res) => {
     )
 })
 
-  router.delete("/clear/all", (req, res)=>{
+router.delete("/all/clear", (req, res)=>{
     place.deleteMany((err)=>{
         if(err){
             res.status(404).json({message: err.message})
@@ -168,7 +178,7 @@ router.delete('/:placeId', (req, res) => {
     })
 })
 
-router.put("/:id", (req, res)=>{
+router.put("/update/:id", (req, res)=>{
     const id = req.params.id
     const updatedPlace = req.body
     place.findByIdAndUpdate(id, updatedPlace, {new: true},(err, updatedPlace)=>{
@@ -181,4 +191,4 @@ router.put("/:id", (req, res)=>{
     })
 })
 
-  module.exports = router;
+module.exports = router

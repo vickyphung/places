@@ -12,9 +12,7 @@ router.get('/', (req, res) => {
 }
 );
 
-
 router.get("/id/:userId", (req, res)=>{
-
     user.find({_id: req.params.userId}, (err, user)=>{
         if(err){
             res.status(404).json({message: "Could not find user with that ID."})
@@ -24,8 +22,7 @@ router.get("/id/:userId", (req, res)=>{
     })
 })
 
-
-router.get("/allusers", (req, res)=>{
+router.get("/all/users", (req, res)=>{
     user.find((err, allUsers)=>{
         if(err){
             res.status(404).json({message: "Error. No user data found."})
@@ -56,7 +53,7 @@ router.post('/', (req, res) => {
   })
   
 //Delete User + User from Places favorite_users list.
-router.delete('/:id', (req, res) => {
+router.delete('/delete/:id', (req, res) => {
         user.findOne({ 
             _id: req.params.id 
             }, (error, foundUser) => {
@@ -106,7 +103,7 @@ router.delete('/:id', (req, res) => {
     })
 
 
-router.delete("/clear/all", (req, res)=>{
+router.delete("/all/clear", (req, res)=>{
     user.deleteMany((err)=>{
         if(err){
             res.status(404).json({message: "pft couldn't even delete everything"})
@@ -132,22 +129,14 @@ router.put('/favorite/:userId/:placeId', (req, res) => {
         } else {
             place.updateOne({
                 _id: req.params.placeId
-            },
-
-
-            {
+            }, {
                 $inc: {
                     favorites: 1
-                },
-          
+                }, 
                 $push: {
                 favorite_users: req.params.userId
                 }
-            }, 
-            
-            
-            
-             (error, updatedPlace) => {
+            }, (error, updatedPlace) => {
                 if (error) {
                     console.error(error); 
                     res.status(404).json({
@@ -176,6 +165,5 @@ router.put("/update/:id", (req, res)=>{
         }
     })
 })
-
 
 module.exports = router;

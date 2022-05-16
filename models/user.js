@@ -6,7 +6,6 @@ const userSchema = new Schema({
   email: {type:String, required: true, unique: true},
   
   favorites: [ { type: Schema.Types.ObjectId, ref: 'place', unique: true } ],
-
   reviews: [ { type: Schema.Types.ObjectId, ref: 'review' } ] 
 
 })
