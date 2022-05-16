@@ -14,8 +14,7 @@ server.get('/', (req, res) => {
     res.status(200).json({
       message: "places to go in the dmv"
     });
-}
-);
+});
 
 const userRouter = require('./routes/users');
 server.use('/user', userRouter);
@@ -28,7 +27,6 @@ server.use('/reviews', reviewRouter);
 
 const seedRouter = require('./routes/seed');
 server.use('/seed', seedRouter);
-
 
 server.listen(PORT, () => {
   mongoConfig()

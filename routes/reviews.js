@@ -4,56 +4,6 @@ const review = require('../models/review');
 const place = require('../models/place');
 const user = require('../models/user');
 
-// router.get("/", (req, res)=>{
-//     review.find((err, allReviews)=>{
-//         if(err){
-//             res.status(404).json({message: "Error. No reviews found."})
-//         } else {
-//             res.status(200).json({
-//             reviews: allReviews})
-//         }
-//     })
-// })
-
-
-
-
-
-
-router.get("/", (req, res)=>{
-    review.find()
-        .populate("place", 'name')
-        
-        .sort({"createdAt": -1})
-
-        .exec
-    
-    ((err, allReviews)=>{
-        if(err){
-            res.status(404).json({message: "Error. No reviews found."})
-        } else {
-            res.status(200).json({
-            reviews: allReviews})
-        }
-    })
-})
-
-
-
-
-
-
-
-router.get("/:placeId", (req, res)=>{
-    // const placeReviewed = req.params.placeId
-    review.find({place: req.params.placeId}, (err, review)=>{
-        if(err){
-            res.status(404).json({message: "Could not find reviews for the place with that ID."})
-        } else {
-            res.status(200).json({reviews: review})
-        }
-    })
-})
 
 router.post('/', (req, res) => {
   // sets the body to a variable
@@ -82,14 +32,12 @@ router.post('/', (req, res) => {
                 }, { 
                     $push: {
                         reviews: {
-                            // review: createdReview.review,
-                            // user: createdReview.user,
                             _id: createdReview._id
                         }
                     }
                }, (error, updatedReview) => {
                     if (error) {
-                        console.error("Review not appended to place");
+                        console.error("Review and place not updated.");
                         res.status(400).json({ 
                             error: 'Review and place not updated.'
                         });
@@ -108,17 +56,53 @@ router.post('/', (req, res) => {
   })
 });
 
+router.get("/", (req, res)=>{
+    review.find()
+        .populate("place", 'name')
+        .sort({"createdAt": -1})
+        .exec
+    ((err, allReviews)=>{
+        if(err){
+            res.status(404).json({message: "Error. No reviews found."})
+        } else {
+            res.status(200).json({
+            reviews: allReviews})
+        }
+    })
+})
 
+router.get("/place/:placeId", (req, res)=>{
+    // const placeReviewed = req.params.placeId
+    review.find({place: req.params.placeId}, (err, review)=>{
+        if(err){
+            res.status(404).json({message: "Could not find reviews for the place with that ID."})
+        } else {
+            res.status(200).json({reviews: review})
+        }
+    })
+})
 
+router.put("/update/:reviewId", (req, res)=>{
+    const id = req.params.reviewId
+    const updatedReview = req.body
+    review.findByIdAndUpdate(id, updatedReview, {new: true},(err, updatedReview)=>{
+        if(err){
+            res.status(404).json({message: "Review not updated."})
+        } else {
+            res.status(202).json({message: "Review updated.",
+            place: updatedReview})
+        }
+    })
+})
 
-router.delete('/:reviewId', (req, res) => {
+router.delete('/delete/:reviewId', (req, res) => {
     review.deleteOne({ 
         _id: req.params.reviewId 
     }, (error, deletedReview) => {
         if (error) {
             console.error("Could not find review to delete."); 
             res.status(404).json({
-                error: 'No review found to delete with that id'
+                error: 'No review with that id found to delete.'
             })
         } else {      
             user.updateMany({
@@ -165,26 +149,14 @@ router.delete('/:reviewId', (req, res) => {
     )
 })
 
-router.delete("/clear/all", (req, res)=>{
+router.delete("/all/clear", (req, res)=>{
     review.deleteMany((err)=>{
-        if(err){
-            res.status(404).json({message: "All reviews could not be deleted"})
-        }else{
-            res.status(204).json({message: "DELETED"})
+        if (err) {
+            res.status(404).json({message: "All reviews could not be deleted."})
+        } else {
+            res.status(204).json({message: "Deleted all reviews."})
         }
     })
 })
 
-router.put("/:id", (req, res)=>{
-    const id = req.params.id
-    const updatedReview = req.body
-    review.findByIdAndUpdate(id, updatedReview, {new: true},(err, updatedReview)=>{
-        if(err){
-            res.status(404).json({message: "Review not updated."})
-        } else {
-            res.status(202).json({message: "Review updated.",
-            place: updatedReview})
-        }
-    })
-})
-module.exports = router;
+module.exports = router

@@ -1,11 +1,12 @@
 
-//delete review... deletes review and review from user, but not from place.
-//favorite user counter
-//lists all tags... sort/remove duplicates
+//unique favorite users/favorites, i didn't know how to stop a user from adding the same place to their favorites twice, i tried using unique:true, but maybe that only works for strings and not objectIDs
 
 
-//security, headers, authentication, jwt, helmet, cors
-
+//remove a favorite
+//find().where()
+//reinput data
+//presentation notes
+//comments
 
 # places.chill(DMV)
 by: vicky p.
@@ -32,7 +33,7 @@ within the place schema, made location it's own address (sub)schema, made _id fi
 
 createReview, added timestamp, push review._id to user.reviews and push review string AND user id into place when post review
 
-user add favorite place, update place._id to user's favorites and user._id to place.favorite_users.
+user add favorite place, update place._id to user's favorites and user._id to place.favorite_users. the place also has an increment counter that goes up by one everytime someone favorites it. 
 
 delete a user, so have to delete their data from places.favorite_users.
 delete a place, then must remove from user.favorites, and delete all reviews of that place.
@@ -55,6 +56,14 @@ Queries
 //lists all tags... could refine this.  sort/remove duplicates
 
 
+
+//get reviews, used .populate to reference the object id of the place and show the place name. don't have to push. as long asyou push the object id, you can always use populate to get the other info.
+
+
+
+//get places, sorted by name
+
+//get places, populate reviews with user/review  - recursed-option
 
 
 

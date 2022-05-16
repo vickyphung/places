@@ -7,9 +7,8 @@ const reviewSchema = new Schema({
     review: { type: String }
 }, { 
     timestamps:  { createdAt: true, updatedAt: false }
-}
-);
+});
 
-const review = mongoose.model('review', reviewSchema);
+const review = mongoose.model('review', reviewSchema)
 
-module.exports = review;
+module.exports = review

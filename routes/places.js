@@ -5,7 +5,6 @@ const place = require('../models/place');
 const review = require('../models/review');
 const user = require('../models/user');
 
-
 router.post("/", (req, res) =>{
     const placeData = req.body
     place.create(placeData, (error, createdPlace) =>{
@@ -17,13 +16,12 @@ router.post("/", (req, res) =>{
         } else {
             console.log("Place created successfully.");
             res.status(200).json({
-                message: "Place was successfully posted.",
+                message: "Place was successfully created.",
                 place: createdPlace
             })
         }
     })
 })
-
 
 router.get("/", (req, res)=>{
     place.find()
@@ -53,6 +51,41 @@ router.get("/all/tags", (req, res)=>{
         }
     })
 })
+
+router.get("/get/:state/:tag", (req, res)=>{
+    const state = req.params.state
+    const tag = req.params.tag
+    place.find()
+    .where('location.state').equals(state)  
+    .where('tags').equals(tag)  
+    .sort('name')
+    .exec
+    ((err, allPlaces)=>{
+        if(err){
+            res.status(404).json({message: "Error. No place data found."})
+        } else {
+            res.status(200).json({message: "places to go",
+            placesList: allPlaces})
+        }
+    })
+})
+
+// router.get("/:state/:tag", (req, res)=>{
+//     const state = req.params.state
+//     place.find({  
+//         "location.state": state,
+//         tags: req.params.tag
+//     }, (err, place)=>{
+//         if(err){
+//             res.status(404).json({
+//                 message: "Could not find places within that state."
+//             })
+//         } else {
+//             res.status(200).json({places: place})
+//         }
+//     })
+// })
+
 
 router.get("/name/:name", (req, res)=>{
     const name = req.params.name
@@ -101,23 +134,6 @@ router.get("/state/:state", (req, res)=>{
     })
 })
 
-
-router.get("/:state/:tag", (req, res)=>{
-    const state = req.params.state
-    place.find({  
-        "location.state": state,
-        tags: req.params.tag
-
-    }, (err, place)=>{
-        if(err){
-            res.status(404).json({
-                message: "Could not find places within that state."
-            })
-        } else {
-            res.status(200).json({places: place})
-        }
-    })
-})
 
 
 router.delete('/delete/:placeId', (req, res) => {
@@ -170,10 +186,10 @@ router.delete('/delete/:placeId', (req, res) => {
 
 router.delete("/all/clear", (req, res)=>{
     place.deleteMany((err)=>{
-        if(err){
-            res.status(404).json({message: err.message})
-        }else{
-            res.status(204).json({message: "DELETED ALL PLACES."})
+        if (err) {
+            res.status(404).json({message: "Error. Could not delete all places."})
+        } else {
+            res.status(204).json({message: "Deleted all places."})
         }
     })
 })

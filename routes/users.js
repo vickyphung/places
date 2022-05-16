@@ -3,8 +3,6 @@ const router = express.Router();
 const user = require('../models/user');
 const place = require('../models/place')
 
-
-
 router.get('/', (req, res) => {
     res.status(200).json({
       message: "user index"
@@ -22,7 +20,7 @@ router.get("/id/:userId", (req, res)=>{
     })
 })
 
-router.get("/all/users", (req, res)=>{
+router.get("/all", (req, res)=>{
     user.find((err, allUsers)=>{
         if(err){
             res.status(404).json({message: "Error. No user data found."})
@@ -73,7 +71,7 @@ router.delete('/delete/:id', (req, res) => {
                     }
                     }, (error, updatedPlace) => {
                         if (error) {
-                            console.error("Error. Not ablt to remove user from places favorite_users list."); 
+                            console.error("Error. User not removed from places.favorite_users."); 
                             res.status(404).json({
                                 error: "User not removed from favorite_user lists."
                             })
@@ -84,7 +82,7 @@ router.delete('/delete/:id', (req, res) => {
                                 if (error) {
                                     console.error(error); 
                                     res.status(404).json({
-                                        error: 'No user to delete found.'
+                                        error: "No user to delete found."
                                     })
                                 } else {
                                     console.log('user ded');
@@ -102,13 +100,12 @@ router.delete('/delete/:id', (req, res) => {
         )
     })
 
-
 router.delete("/all/clear", (req, res)=>{
     user.deleteMany((err)=>{
         if(err){
             res.status(404).json({message: "pft couldn't even delete everything"})
         }else{
-            res.status(204).json({message: "ERRETHING HAS BEEN DELETED"})
+            res.status(204).json({message: "ERRE User HAS BEEN DELETED"})
         }
     })
 })
@@ -152,10 +149,51 @@ router.put('/favorite/:userId/:placeId', (req, res) => {
     })
 })
 
+
+router.put('/remove/favorite/:userId/:placeId', (req, res) => {
+    user.updateOne({ 
+        _id: req.params.userId 
+    }, {
+        $pull: {
+        favorites: req.params.placeId
+        }
+    }, (error, updatedUser) => {
+        if (error) {
+            console.error(error);
+            res.status(404).json({ 
+                error: 'Error. No user found to remove favorite.'
+            });
+        } else {
+            place.updateOne({
+                _id: req.params.placeId
+            }, {
+                $inc: {
+                    favorites: -1
+                }, 
+                $pull: {
+                favorite_users: req.params.userId
+                }
+            }, (error, updatedPlace) => {
+                if (error) {
+                    console.error(error); 
+                    res.status(404).json({
+                        error: 'Could not remove favorite from place.'
+                    })
+                } else {
+                    res.status(202).json({
+                        message: 'Successfully updated the user and place favorite lists.'
+                    })
+                }
+            })
+        }
+    })
+})
+
+
+
 router.put("/update/:id", (req, res)=>{
     const id = req.params.id
     const updatedUser = req.body
-
     user.findByIdAndUpdate(id, updatedUser, {new: true},(err, updatedUser)=>{
         if(err){
             res.status(404).json({message: "User not updated."})
@@ -166,4 +204,4 @@ router.put("/update/:id", (req, res)=>{
     })
 })
 
-module.exports = router;
+module.exports = router

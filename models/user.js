@@ -6,10 +6,10 @@ const userSchema = new Schema({
   email: {type:String, required: true, unique: true},
   
   favorites: [ { type: Schema.Types.ObjectId, ref: 'place', unique: true } ],
-  reviews: [ { type: Schema.Types.ObjectId, ref: 'review' } ] 
-
+  reviews: [ { type: Schema.Types.ObjectId, ref: 'review' } ],
+  // posts: [ { type: Schema.Types.ObjectId, ref: 'place' } ]
 })
 
-const user = mongoose.model('user', userSchema);
+const user = mongoose.model('user', userSchema)
 
-module.exports = user;
+module.exports = user
