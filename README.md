@@ -1,9 +1,6 @@
 
-//unique favorite users/favorites, i didn't know how to stop a user from adding the same place to their favorites twice, i tried using unique:true, but maybe that only works for strings and not objectIDs
+//unable to make favorites and favorite_users unique.
 
-
-//remove a favorite
-//find().where()
 //reinput data
 //presentation notes
 //comments
@@ -65,7 +62,16 @@ Queries
 
 //get places, populate reviews with user/review  - recursed-option
 
-
+"location.city"
+.find()
+    .where
+    .populate
+        path, select, options: recursed
+    .sort
+_id: 0,
+subSchema, _id: false,
+timestamps
+$inc
 
 
 

@@ -13,7 +13,9 @@ router.get('/', (req, res) => {
 router.get("/id/:userId", (req, res)=>{
     user.find({_id: req.params.userId}, (err, user)=>{
         if(err){
-            res.status(404).json({message: "Could not find user with that ID."})
+            res.status(404).json({
+                message: "Could not find user with that ID."
+            })
         } else {
             res.status(200).json({user: user})
         }
@@ -23,7 +25,9 @@ router.get("/id/:userId", (req, res)=>{
 router.get("/all", (req, res)=>{
     user.find((err, allUsers)=>{
         if(err){
-            res.status(404).json({message: "Error. No user data found."})
+            res.status(404).json({
+                message: "Error. No user data found."
+            })
         } else {
             res.status(200).json({
             usersList: allUsers})
@@ -76,7 +80,7 @@ router.delete('/delete/:id', (req, res) => {
                                 error: "User not removed from favorite_user lists."
                             })
                         } else {
-                            user.deleteOne({ // deletes one user
+                            user.deleteOne({
                                 _id: req.params.id 
                             }, (error, outputA) => {
                                 if (error) {

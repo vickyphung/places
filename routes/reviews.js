@@ -59,6 +59,7 @@ router.post('/', (req, res) => {
 router.get("/", (req, res)=>{
     review.find()
         .populate("place", 'name')
+        .populate("user", 'name')
         .sort({"createdAt": -1})
         .exec
     ((err, allReviews)=>{

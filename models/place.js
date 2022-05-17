@@ -5,7 +5,7 @@ const locationSchema = mongoose.Schema({
   street: { type: String, required: true },
   city: { type: String, required: true },
   state: { type: String, required: true },
-  zip:{ type: Number, required: false, min: 5, max: 5 }
+  zip:{ type: Number, required: false }
 },
 {
   _id: false
@@ -17,7 +17,11 @@ const placeSchema = new Schema({
   hours: { type: String, required: false },
   tags: [ { type: String, required: true } ],
   // posted_by: { type: Schema.Types.ObjectId, ref: 'user', required: false },
-  reviews: [ { type: Schema.Types.ObjectId, ref: 'review', required: false } ],
+  reviews: [ { 
+    type: Schema.Types.ObjectId,
+    ref: 'review',
+    required: false
+   } ],
   favorites:  { type: Number, default: 0, required: false } ,
   favorite_users: [ { type: Schema.Types.ObjectId, ref: 'user', required: false } ]
 })
