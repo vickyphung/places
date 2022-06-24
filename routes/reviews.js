@@ -4,6 +4,12 @@ const review = require('../models/review');
 const place = require('../models/place');
 const user = require('../models/user');
 
+const bcrypt = require('bcrypt');
+const saltRounds = process.env.SALT_ROUNDS;
+const jwtSecret = process.env.JWT_SECRET;
+const jwt = require('jwt-simple');
+const { validate, login } = require('../middlewares');
+
 
 router.post('/', (req, res) => {
   // sets the body to a variable
@@ -82,6 +88,18 @@ router.get("/place/:placeId", (req, res)=>{
         }
     })
 })
+
+router.get("/id/:reviewId", (req, res)=>{
+    // const placeReviewed = req.params.placeId
+    review.find({_id: req.params.reviewId}, (err, review)=>{
+        if(err){
+            res.status(404).json({message: "Could not find reviews for the place with that ID."})
+        } else {
+            res.status(200).json({reviews: review})
+        }
+    })
+})
+
 
 router.put("/update/:reviewId", (req, res)=>{
     const id = req.params.reviewId

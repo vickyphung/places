@@ -16,7 +16,7 @@ const placeSchema = new Schema({
   location: { type: locationSchema, required: true },
   hours: { type: String, required: false },
   tags: [ { type: String, required: true } ],
-  // posted_by: { type: Schema.Types.ObjectId, ref: 'user', required: false },
+  user: { type: Schema.Types.ObjectId, ref: 'user', required: false },
   reviews: [ { 
     type: Schema.Types.ObjectId,
     ref: 'review',

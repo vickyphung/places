@@ -5,7 +5,13 @@ const place = require('../models/place');
 const review = require('../models/review');
 const user = require('../models/user');
 
-router.post("/", (req, res) =>{
+const bcrypt = require('bcrypt');
+const saltRounds = process.env.SALT_ROUNDS;
+const jwtSecret = process.env.JWT_SECRET;
+const jwt = require('jwt-simple');
+const { validate, login } = require('../middlewares');
+
+router.post("/add", (req, res) =>{
     const placeData = req.body
     place.create(placeData, (error, createdPlace) =>{
         if (error){
@@ -92,6 +98,16 @@ router.get("/name/:name", (req, res)=>{
     place.findOne({name: name,}, (err, place)=>{
         if(err){
             res.status(404).json({message: "Could not find a place with that name."})
+        } else {
+            res.status(200).json(place)
+        }
+    })
+})
+
+router.get("/id/:placeId", (req, res)=>{
+    place.find({_id: req.params.placeId}, (err, place)=>{
+        if(err){
+            res.status(404).json({message: "Could not find a place with that Id."})
         } else {
             res.status(200).json(place)
         }
