@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const User = require('./models/user');
 
 const validate = (req, res, next) => {
+  console.log(req.header("JWT-Token"))
   if (req.header('JWT-Token')) { // if the correct header exists
     let decoded = jwt.decode(req.header('JWT-Token'), jwtSecret); // decode the jwt token that is contained within it
     if (decoded.name && decoded.password) { // if the decoded token has both a name and password field

@@ -171,6 +171,59 @@ router.put('/favorite/add/:placeId', validate,  (req, res) => {
 })
 
 
+
+
+router.put("/favorite/put/:userId/:placeId", (req, res) => {
+  user.updateOne(
+    {
+      _id: req.params.userId,
+    },
+    {
+      $push: {
+        favorites: req.params.placeId,
+      },
+    },
+    (error, updatedUser) => {
+      if (error) {
+        console.error(error);
+        res.status(404).json({
+          error: "Error. No user found to add favorite.",
+        });
+      } else {
+        place.updateOne(
+          {
+            _id: req.params.placeId,
+          },
+          {
+            $inc: {
+              favorites: +1,
+            },
+            $push: {
+              favorite_users: req.params.userId,
+            },
+          },
+          (error, updatedPlace) => {
+            if (error) {
+              console.error(error);
+              res.status(404).json({
+                error: "Could not add favorite from place.",
+              });
+            } else {
+              res.status(202).json({
+                message:
+                  "Successfully updated the user and place favorite lists.",
+              });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+
+
+
 router.put('/favorite/remove/:userId/:placeId', (req, res) => {
     user.updateOne({ 
         _id: req.params.userId 
