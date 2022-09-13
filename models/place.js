@@ -13,7 +13,7 @@ const locationSchema = mongoose.Schema({
 
 const placeSchema = new Schema({
   name: { type: String, required: true, unique: true },
-  location: { type: locationSchema, required: true },
+  location: { type: locationSchema, required: true, unique: true },
   hours: { type: String, required: false },
   tags: [ { type: String, required: true } ],
   user: { type: Schema.Types.ObjectId, ref: 'user', required: false },

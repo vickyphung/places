@@ -4,11 +4,11 @@ const review = require('../models/review');
 const place = require('../models/place');
 const user = require('../models/user');
 
-const bcrypt = require('bcrypt');
-const saltRounds = process.env.SALT_ROUNDS;
-const jwtSecret = process.env.JWT_SECRET;
-const jwt = require('jwt-simple');
-const { validate, login } = require('../middlewares');
+// const bcrypt = require('bcrypt');
+// const saltRounds = process.env.SALT_ROUNDS;
+// const jwtSecret = process.env.JWT_SECRET;
+// const jwt = require('jwt-simple');
+// const { validate, login } = require('../middlewares');
 
 
 router.post('/', (req, res) => {
