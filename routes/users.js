@@ -58,6 +58,17 @@ const { validate, login } = require('../middlewares');
         })
     })
 
+
+    router.get("/account/:userId", (req, res)=>{
+        place.find({_id: req.params.userId}, (err, place)=>{
+            if(err){
+                res.status(404).json({message: "Could not find a user with that Id."})
+            } else {
+                res.status(200).json({user})
+            }
+        })
+    })
+
     router.get("/all", (req, res)=>{
         user.find((err, allUsers)=>{
             if(err){
