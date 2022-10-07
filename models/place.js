@@ -14,8 +14,10 @@ const locationSchema = mongoose.Schema({
 const placeSchema = new Schema({
   name: { type: String, required: true, unique: true },
   location: { type: locationSchema, required: true },
+  url: { type: String, required: false },
   hours: { type: String, required: false },
-  tags: [ { type: String, required: true } ],
+  phone: { type: String, required: false },
+  tags: [ { type: String, required: false } ],
   user: { type: Schema.Types.ObjectId, ref: 'user', required: false },
   reviews: [ { 
     type: Schema.Types.ObjectId,
